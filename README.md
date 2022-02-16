@@ -2,5 +2,5 @@
 Savvy Traveler
 
 Group members:
-Ada Lovelace adalovelace@csu.fullerton.edu
+Hemanth Rishi Sivakumar hemanth@csu.fullerton.edu
 Brijesh Prajapati brijesh.prajapati@csu.fullerton.edu
