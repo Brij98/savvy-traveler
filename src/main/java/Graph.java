@@ -2,20 +2,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Graph {
-    private List<Vertex> vertices = new ArrayList<>();
-    private List<Edge> edges = new ArrayList<>();
+    private final List<Vertex> vertices = new ArrayList<>();
+    private final List<Edge> edges = new ArrayList<>();
 
     public List<Vertex> getVertices(){ return vertices; }
-
     public List<Edge> getEdges(){ return edges; }
 
-    public Vertex addVertex(String value){
+
+    public Vertex createVertex(String value){
         Vertex vertex = new Vertex(value);
         vertices.add(vertex);
         return vertex;
     }
 
-    public Edge[] addEdge(Vertex vertex1, Vertex vertex2, double cost){
+    public void addVertex(Vertex vertex){
+        if (vertex == null){
+            throw (new NullPointerException("Vertex is null"));
+        }
+        vertices.add(vertex);
+    }
+    public Vertex findVertex(String value){
+        return vertices.stream().
+                filter(vertex -> value.equals(vertex.getValue()))
+                .findAny()
+                .orElse(null);
+    }
+    public void addEdge(Vertex vertex1, Vertex vertex2, double cost){
 
         if (vertex1 == null || vertex2 == null){
             throw new NullPointerException("Invalid vertex1 and vertex2");
@@ -29,12 +41,13 @@ public class Graph {
         if (! edges.contains(edge2)){
             vertex2.getEdges().add(edge2);
         }
-        return new Edge[]{edge1, edge2};
     }
 
-    public static class Vertex{
+    public static class Vertex {
         private String value = "";
+        private double weight = 0.0;
         private List<Edge> edges = new ArrayList<>();
+        private Vertex prevVertex = null; // used for storing previous vertex for keeping track of the path
 
         public Vertex(String value){ this.value = value; }
 
@@ -44,8 +57,20 @@ public class Graph {
             return value;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public Vertex getPrevVertex() {
+            return prevVertex;
+        }
+
+        public void setPrevVertex(Vertex prevVertex) {
+            this.prevVertex = prevVertex;
+        }
+
+        public double getWeight() {
+            return weight;
+        }
+
+        public void setWeight(double weight) {
+            this.weight = weight;
         }
 
         public Edge getEdge(Vertex vertex){ // return the edge which has the 'to' vertex
@@ -61,7 +86,7 @@ public class Graph {
         private Vertex toVertex = null;
         private Vertex fromVertex = null;
 
-        public Edge(double cost, Vertex to, Vertex from) {
+        public Edge(double cost, Vertex from, Vertex to) {
             if (to == null || from == null){
                 throw (new NullPointerException("'to' vertex and 'from' cannot be null."));
             }
