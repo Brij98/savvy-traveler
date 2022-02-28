@@ -8,14 +8,22 @@ public class Main {
         createGraph();
 
         StringBuilder sb = new StringBuilder();
-        findHighestProbPath(graph, graph.findVertex("A"), graph.findVertex("F")).
+        // example 1
+//        findHighestProbPath(graph, graph.findVertex("A"), graph.findVertex("F")).
+//                forEach(v -> sb.append(v.getValue()).append(" -> "));
+
+        // example 2
+//        findHighestProbPath(graph, graph.findVertex("C"), graph.findVertex("A")).
+//                forEach(v -> sb.append(v.getValue()).append(" -> "));
+
+        // example 3
+        findHighestProbPath(graph, graph.findVertex("E"), graph.findVertex("C")).
                 forEach(v -> sb.append(v.getValue()).append(" -> "));
 
         System.out.println("Path: "+ sb.substring(0, sb.length() - 3));
     }
 
     public static void createGraph(){
-        // EXAMPLE 1 GRAPH
         Graph.Vertex a = new Graph.Vertex("A");
         graph.addVertex(a);
         Graph.Vertex b = new Graph.Vertex("B");
@@ -33,7 +41,8 @@ public class Main {
         Graph.Vertex h = new Graph.Vertex("H");
         graph.addVertex(h);
 
-        graph.addEdge(a,b,0.8);
+        // EXAMPLE 1 GRAPH
+ /*       graph.addEdge(a,b,0.8);
         graph.addEdge(a,c,0.7);
         graph.addEdge(a,d,0.9);
         graph.addEdge(b,c,0.8);
@@ -46,11 +55,33 @@ public class Main {
         graph.addEdge(e,h,0.6);
         graph.addEdge(f,g,0.7);
         graph.addEdge(f,h,0.7);
-        graph.addEdge(g,h,0.9);
+        graph.addEdge(g,h,0.9);*/
 
         // EXAMPLE 2 GRAPH
+        /*graph.addEdge(a,b,0.8);
+        graph.addEdge(a,d,0.9);
+        graph.addEdge(b,c,0.6);
+        graph.addEdge(b,e,0.7);
+        graph.addEdge(c,f,0.8);
+        graph.addEdge(d,e,0.8);
+        graph.addEdge(d,g,0.8);
+        graph.addEdge(e,f,0.9);
+        graph.addEdge(e,h,0.6);
+        graph.addEdge(g,h,0.9);*/
 
         // EXAMPLE 3 GRAPH
+        graph.addEdge(a,b,0.8);
+        graph.addEdge(a,d,0.9);
+        graph.addEdge(a,e,0.8);
+        graph.addEdge(b,c,0.6);
+        graph.addEdge(b,f,0.7);
+        graph.addEdge(c,d,0.9);
+        graph.addEdge(c,g,0.6);
+        graph.addEdge(d,h,0.7);
+        graph.addEdge(e,f,0.6);
+        graph.addEdge(e,h,0.8);
+        graph.addEdge(f,g,0.9);
+        graph.addEdge(h,g,0.6);
     }
 
     public static List<Graph.Vertex> findHighestProbPath(Graph graph, Graph.Vertex startVertex, Graph.Vertex endVertex){
@@ -102,9 +133,9 @@ public class Main {
     public static class VertexComparator implements Comparator<Graph.Vertex>{
         @Override
         public int compare(Graph.Vertex o1, Graph.Vertex o2) {
-            if (o1.getWeight() > o2.getWeight()){
+            if (o1.getWeight() < o2.getWeight()){
                 return 1;
-            }else if(o1.getWeight() < o2.getWeight()){
+            }else if(o1.getWeight() > o2.getWeight()){
                 return -1;
             }
             return 0;
