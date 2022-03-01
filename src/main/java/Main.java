@@ -9,18 +9,19 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         // example 1
-//        findHighestProbPath(graph, graph.findVertex("A"), graph.findVertex("F")).
-//                forEach(v -> sb.append(v.getValue()).append(" -> "));
+        findHighestProbPath(graph, graph.findVertex("A"), graph.findVertex("F")).getShortestPath().
+                forEach(v -> sb.append(v.getValue()).append(" -> "));
 
         // example 2
-//        findHighestProbPath(graph, graph.findVertex("C"), graph.findVertex("A")).
+//        findHighestProbPath(graph, graph.findVertex("C"), graph.findVertex("A")).getShortestPath().
 //                forEach(v -> sb.append(v.getValue()).append(" -> "));
 
         // example 3
-        findHighestProbPath(graph, graph.findVertex("E"), graph.findVertex("C")).
-                forEach(v -> sb.append(v.getValue()).append(" -> "));
+        /*findHighestProbPath(graph, graph.findVertex("E"), graph.findVertex("C")).getShortestPath().
+                forEach(v -> sb.append(v.getValue()).append(" -> "));*/
 
         System.out.println("Path: "+ sb.substring(0, sb.length() - 3));
+        System.out.println("Most reliable destination: " + findMostReliableDest(graph).getValue());
     }
 
     public static void createGraph(){
@@ -42,7 +43,7 @@ public class Main {
         graph.addVertex(h);
 
         // EXAMPLE 1 GRAPH
- /*       graph.addEdge(a,b,0.8);
+        graph.addEdge(a,b,0.8);
         graph.addEdge(a,c,0.7);
         graph.addEdge(a,d,0.9);
         graph.addEdge(b,c,0.8);
@@ -55,36 +56,37 @@ public class Main {
         graph.addEdge(e,h,0.6);
         graph.addEdge(f,g,0.7);
         graph.addEdge(f,h,0.7);
-        graph.addEdge(g,h,0.9);*/
+        graph.addEdge(g,h,0.9);
 
         // EXAMPLE 2 GRAPH
-        /*graph.addEdge(a,b,0.8);
-        graph.addEdge(a,d,0.9);
-        graph.addEdge(b,c,0.6);
-        graph.addEdge(b,e,0.7);
-        graph.addEdge(c,f,0.8);
-        graph.addEdge(d,e,0.8);
-        graph.addEdge(d,g,0.8);
-        graph.addEdge(e,f,0.9);
-        graph.addEdge(e,h,0.6);
-        graph.addEdge(g,h,0.9);*/
+//        graph.addEdge(a,b,0.8);
+//        graph.addEdge(a,d,0.9);
+//        graph.addEdge(b,c,0.6);
+//        graph.addEdge(b,e,0.7);
+//        graph.addEdge(c,f,0.8);
+//        graph.addEdge(d,e,0.8);
+//        graph.addEdge(d,g,0.8);
+//        graph.addEdge(e,f,0.9);
+//        graph.addEdge(e,h,0.6);
+//        graph.addEdge(g,h,0.9);
 
         // EXAMPLE 3 GRAPH
-        graph.addEdge(a,b,0.8);
-        graph.addEdge(a,d,0.9);
-        graph.addEdge(a,e,0.8);
-        graph.addEdge(b,c,0.6);
-        graph.addEdge(b,f,0.7);
-        graph.addEdge(c,d,0.9);
-        graph.addEdge(c,g,0.6);
-        graph.addEdge(d,h,0.7);
-        graph.addEdge(e,f,0.6);
-        graph.addEdge(e,h,0.8);
-        graph.addEdge(f,g,0.9);
-        graph.addEdge(h,g,0.6);
+//        graph.addEdge(a,b,0.8);
+//        graph.addEdge(a,d,0.9);
+//        graph.addEdge(a,e,0.8);
+//        graph.addEdge(b,c,0.6);
+//        graph.addEdge(b,f,0.7);
+//        graph.addEdge(c,d,0.9);
+//        graph.addEdge(c,g,0.6);
+//        graph.addEdge(d,h,0.7);
+//        graph.addEdge(e,f,0.6);
+//        graph.addEdge(e,h,0.8);
+//        graph.addEdge(f,g,0.9);
+//        graph.addEdge(h,g,0.6);
     }
 
-    public static List<Graph.Vertex> findHighestProbPath(Graph graph, Graph.Vertex startVertex, Graph.Vertex endVertex){
+    public static HighestProbPathProperty findHighestProbPath(Graph graph, Graph.Vertex startVertex,
+                                                              Graph.Vertex endVertex){
 
         if (graph == null){
             throw (new NullPointerException("Graph is null"));
@@ -127,7 +129,35 @@ public class Main {
             if (vertex.equals(startVertex)){ break; }
         }
         Collections.reverse(shortestPath);
-        return shortestPath;
+        HighestProbPathProperty pathProperty = new HighestProbPathProperty(shortestPath, endVertex.getWeight());
+        graph.getVertices().forEach(v -> { v.setPrevVertex(null); v.setWeight(0.0); }); // resetting graph
+        return pathProperty;
+    }
+
+    public static Graph.Vertex findMostReliableDest(Graph graph){
+
+        if (graph == null){
+            throw (new NullPointerException("Graph is null"));
+        }
+        Graph.Vertex vertexToRet = null;
+        List<Graph.Vertex> vertices = graph.getVertices();
+        HashMap<Graph.Vertex, Integer> probabilities = new HashMap<>();
+
+        double max  = 0.0;
+        Graph.Vertex maxVertex = null;
+        for (Graph.Vertex fromVertex : vertices){
+            double sum = 0.0;
+            for (Graph.Vertex toVertex : vertices) {
+                sum += findHighestProbPath(graph, fromVertex, toVertex).getProbability();
+            }
+            sum--;
+            if (sum > max){
+                maxVertex = fromVertex;
+                max = sum;
+            }
+        }
+//        System.out.println("max: " + max);
+        return maxVertex;
     }
 
     public static class VertexComparator implements Comparator<Graph.Vertex>{
@@ -140,6 +170,25 @@ public class Main {
             }
             return 0;
         }
+    }
+
+    public static class HighestProbPathProperty{
+        List<Graph.Vertex> shortestPath;
+        double probability = 0.0;
+
+        public HighestProbPathProperty(List<Graph.Vertex> path, double probability){
+            this.shortestPath = path;
+            this.probability = probability;
+        }
+
+        public List<Graph.Vertex> getShortestPath() {
+            return shortestPath;
+        }
+
+        public double getProbability() {
+            return probability;
+        }
+
     }
 
 }

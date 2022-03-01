@@ -47,7 +47,7 @@ public class Graph {
         private String value = "";
         private double weight = 0.0;
         private List<Edge> edges = new ArrayList<>();
-        private Vertex prevVertex = null; // used for storing previous vertex for keeping track of the path
+        private Vertex prevVertex = null; // stores previous vertex for keeping track of the path
 
         public Vertex(String value){ this.value = value; }
 
