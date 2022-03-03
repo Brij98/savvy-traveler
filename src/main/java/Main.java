@@ -9,41 +9,13 @@ public class Main {
 //        }
 //        String param = args[0].toLowerCase(Locale.ROOT);
 
-        String param = "EXample3".toLowerCase(Locale.ROOT);
+        String param = "ExaMplE3".toLowerCase(Locale.ROOT);
 
         Graph graph = new Graph();
-        addVerticesAndEdges(graph, param);
-        GraphOperations graphOperations = new GraphOperations(graph);
+        GraphOperations graphOperations = null;
         GraphOperations.HighestProbPathProperty pathProperty = null;
 
-        switch (param){
-            case "example1": {
-                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("A"),
-                        graph.findVertex("F"));
-            }
-            break;
-            case "example2":  {
-//                pathProperty = findHighestProbPath(graph.findVertex("C"), graph.findVertex("A"));
-                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("C"),
-                        graph.findVertex("A"));
-            }
-            break;
-            case "example3": {
-                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("E"),
-                        graph.findVertex("C"));
-            }
-            break;
-            default: System.err.println("Invalid argument received");
-        }
-
-        System.out.println(
-                "path " + pathProperty.toString() +
-                        ", probability " + new DecimalFormat("#.####").format(pathProperty.getProbability()) +
-                        ", and city " + graphOperations.findMostReliableDest().getValue()
-        );
-    }
-
-    public static void addVerticesAndEdges(Graph graph, String arg){
+        // add vertices
         Graph.Vertex a = graph.createVertex("A");
         Graph.Vertex b = graph.createVertex("B");
         Graph.Vertex c = graph.createVertex("C");
@@ -53,9 +25,9 @@ public class Main {
         Graph.Vertex g = graph.createVertex("G");
         Graph.Vertex h = graph.createVertex("H");
 
-        switch (arg){
-            case "example1":{
-                // EXAMPLE 1 GRAPH
+        switch (param){
+            case "example1": {
+                // add edges for example1
                 graph.addEdge(a,b,0.8);
                 graph.addEdge(a,c,0.7);
                 graph.addEdge(a,d,0.9);
@@ -70,9 +42,14 @@ public class Main {
                 graph.addEdge(f,g,0.7);
                 graph.addEdge(f,h,0.7);
                 graph.addEdge(g,h,0.9);
-            }break;
-            case "example2":{
-//                 EXAMPLE 2 GRAPH
+
+                graphOperations = new GraphOperations(graph);
+                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("A"),
+                        graph.findVertex("F"));
+            }
+            break;
+            case "example2":  {
+                // add edges for example 2
                 graph.addEdge(a,b,0.8);
                 graph.addEdge(a,d,0.9);
                 graph.addEdge(b,c,0.6);
@@ -83,9 +60,14 @@ public class Main {
                 graph.addEdge(e,f,0.9);
                 graph.addEdge(e,h,0.6);
                 graph.addEdge(g,h,0.9);
-            }break;
+
+                graphOperations = new GraphOperations(graph);
+                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("C"),
+                        graph.findVertex("A"));
+            }
+            break;
             case "example3": {
-                // EXAMPLE 3 GRAPH
+                // add edges for example3
                 graph.addEdge(a,b,0.8);
                 graph.addEdge(a,d,0.9);
                 graph.addEdge(a,e,0.8);
@@ -98,7 +80,31 @@ public class Main {
                 graph.addEdge(e,h,0.8);
                 graph.addEdge(f,g,0.9);
                 graph.addEdge(h,g,0.6);
-            }break;
-        }   // end of switch
+
+                graphOperations = new GraphOperations(graph);
+                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("E"),
+                        graph.findVertex("C"));
+            }
+            case "example4": {
+                // add edges for example4
+
+
+//                graphOperations = new GraphOperations(graph);
+//                pathProperty = graphOperations.findHighestProbPath(graph.findVertex("A"),
+//                        graph.findVertex("B"));
+            }
+            break;
+            default: {
+                System.err.println("Invalid argument received. Check arguments and rerun");
+                throw (new NullPointerException("pathProperty null and graphOperations null"));
+            }
+        }
+
+        System.out.println(
+                "path " + pathProperty.toString() +
+                        ", probability " + new DecimalFormat("#.####").format(pathProperty.getProbability()) +
+                        ", and city " + graphOperations.findMostReliableDest().getValue()
+        );
     }
+
 }
