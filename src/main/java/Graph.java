@@ -1,7 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 
-//
+/*Class graph is the class we will use to represent undirected weighted graphs.
+    It contains two private lists that contain vertex (List<vertex> vertices) and edges (List<Edge> edges).
+    It contains
+
+    Accessors:
+    List<Vertex> getVertices()
+    List<Edge> getEdges()
+    Modifiers:
+    void addVertex(Vertex vertex)
+    void addEdge(Vertex vertex1, Vertex vertex2, double cost)
+    Vertex createVertex(String value)
+
+    Member function
+    Vertex findVertex(String value)
+        This member function returns a Vertex object that has the same name as input value.
+*/
+
 public class Graph {
     private final List<Vertex> vertices = new ArrayList<>();
     private final List<Edge> edges = new ArrayList<>();
@@ -44,6 +60,15 @@ public class Graph {
         }
     }
 
+/*Class Vertex is the class used to represent a vertex in graph.
+    It contains 4 instance variables
+    private String value   represents name of that vertex
+    private double weight    represents the value of probability to arrive on time from all other cities (it is this value in project instruction: For city A, the probability to arrive on time from all other cities is = 0.8 (from B) + 0.7 (from C) + 0.9 (from D) + 0.504 (from E) + 0.63 (from F) + 0.72 (from G) + 0.648 (from H))
+    private List<Edge> edges   represents all the edges this vertex has.
+    private Vertex prevVertex    a helper variable that stores previous vertex when we are doing traversal
+    Member functions of this class are all modifiers and accessors.
+*/
+
     public static class Vertex {
         private String value = "";
         private double weight = 0.0;
@@ -81,6 +106,14 @@ public class Graph {
             return null;
         }
     }
+
+/*Class Edge is the class used to represent an edge
+    It contains three instance variables
+    private Vertex toVertex    represents the first vertex
+    private Vertex fromVertex    represents the second vertex
+    private double cost    represents the cost of traveling between these two vertexes
+    All member functions are constructors, modifiers, and accessors.
+*/
 
     public static class Edge{
         private double cost = 0.0;

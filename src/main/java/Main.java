@@ -1,15 +1,27 @@
 import java.text.DecimalFormat;
 import java.util.*;
 
+/*Our main contains two major parts.
+    In the first part, input values are hard coded.
+    You may add vertices as you wish below the comments that says add vertices.
+    You may also add edges as you wish in switch cases.
+
+    The second part will call member functions of java classes we created, and all algorithms will be performed using those functions.
+    After we find target output of the problem, it will then output value we found.
+    You can find details of those classes in files containing them (GraphOperations.java and Graph.java)
+*/
+
 public class Main {
     public static void main(String[] args) {
 
-//        if (Objects.equals(args[0], "")){
-//            throw (new NullPointerException("No arguments passed"));
-//        }
-//        String param = args[0].toLowerCase(Locale.ROOT);
+        // uncomment this if you want to run from command prompt and comment this code if you want to run in IDE
+        if (Objects.equals(args[0], "")){
+            throw (new NullPointerException("No arguments passed"));
+        }
+        String param = args[0].toLowerCase(Locale.ROOT);
 
-        String param = "ExaMplE3".toLowerCase(Locale.ROOT);
+        // uncomment this if you want to run from IDE and comment the above code
+//        String param = "ExaMplE3".toLowerCase(Locale.ROOT);
 
         Graph graph = new Graph();
         GraphOperations graphOperations = null;
@@ -101,9 +113,9 @@ public class Main {
         }
 
         System.out.println(
-                "path " + pathProperty.toString() +
+                "Output:\n" +"i) path " + pathProperty.toString() +
                         ", probability " + new DecimalFormat("#.####").format(pathProperty.getProbability()) +
-                        ", and city " + graphOperations.findMostReliableDest().getValue()
+                        "\nii) city " + graphOperations.findMostReliableDest().getValue()
         );
     }
 
